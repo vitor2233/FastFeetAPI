@@ -12,3 +12,54 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum UserRole {
+  DELIVERYMAN
+  ADMIN
+}
+
+enum OrderStatus {
+  WAITING
+  WITHDRAWN
+  DELIVERED
+}
+
+model Receiver {
+  id        String    @id @default(uuid())
+  name      String
+  street    String
+  district  String
+  number    String
+  state     String
+  city      String
+  cep       String
+  latitude  Decimal
+  longitude Decimal
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  orders    Order[]
+}
+
+model User {
+  id       String   @id @default(uuid())
+  cpf      String
+  password String
+  role     UserRole @default(DELIVERYMAN)
+  orders   Order[]
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  status        OrderStatus @default(WAITING)
+  name          String
+  withdrawnDate DateTime?
+  deliveryDate  DateTime?
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime?   @updatedAt @map("updated_at")
+
+  receiver   Receiver @relation(fields: [receiverId], references: [id])
+  receiverId String
+
+  deliveryman   User   @relation(fields: [deliverymanId], references: [id])
+  deliverymanId String
+}
