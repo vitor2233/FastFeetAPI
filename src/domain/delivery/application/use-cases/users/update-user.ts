@@ -6,6 +6,7 @@ import { HashGenerator } from "@/domain/delivery/cryptography/hash-generator";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 
 interface UpdateUserUseCaseRequest {
+    userId: string
     cpf: string
     name: string
 }
@@ -15,11 +16,10 @@ type UpdateUserUseCaseResponse = Either<ResourceNotFoundError, { user: User }>
 export class UpdateUserUseCase {
     constructor(
         private usersRepository: UsersRepository,
-        private hashGenerator: HashGenerator
     ) { }
 
-    async execute({ cpf, name }: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
-        const user = await this.usersRepository.findByCpf(cpf)
+    async execute({ userId, cpf, name }: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
+        const user = await this.usersRepository.findById(userId)
         if (!user) {
             return left(new ResourceNotFoundError())
         }

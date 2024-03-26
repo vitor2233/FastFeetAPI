@@ -27,12 +27,7 @@ enum OrderStatus {
 model Receiver {
   id        String    @id @default(uuid())
   name      String
-  street    String
-  district  String
-  number    String
-  state     String
-  city      String
-  cep       String
+  address   String
   latitude  Decimal
   longitude Decimal
   createdAt DateTime  @default(now()) @map("created_at")
@@ -61,6 +56,6 @@ model Order {
   receiver   Receiver @relation(fields: [receiverId], references: [id])
   receiverId String
 
-  deliveryman   User   @relation(fields: [deliverymanId], references: [id])
-  deliverymanId String
+  deliveryman   User?   @relation(fields: [deliverymanId], references: [id])
+  deliverymanId String?
 }
