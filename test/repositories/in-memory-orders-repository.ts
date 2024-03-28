@@ -1,5 +1,6 @@
-import { OrdersRepository } from "@/domain/delivery/application/repositories/orders-repository";
+import { FindManyNearbyParams, OrdersRepository } from "@/domain/delivery/application/repositories/orders-repository";
 import { Order } from "@/domain/delivery/enterprise/entities/order";
+import { getDistanceBetweenCoordinates } from "test/get-distance-between-coordinates";
 
 
 export class InMemoryOrdersRepository implements OrdersRepository {
@@ -13,6 +14,16 @@ export class InMemoryOrdersRepository implements OrdersRepository {
         }
 
         return order
+    }
+
+    async findManyNearby(params: FindManyNearbyParams): Promise<Order[]> {
+        return this.items.filter((item) => {
+            const distance = getDistanceBetweenCoordinates(
+                { latitude: params.latitude, longitude: params.longitude },
+                { latitude: item.latitude, longitude: item.longitude })
+
+            return distance < 10
+        })
     }
 
     async create(order: Order): Promise<void> {

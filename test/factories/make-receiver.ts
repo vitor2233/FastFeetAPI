@@ -9,9 +9,6 @@ export function makeReceiver(
     const question = Receiver.create(
         {
             name: faker.person.fullName(),
-            address: faker.location.streetAddress(),
-            latitude: faker.location.latitude(),
-            longitude: faker.location.longitude(),
             ...override,
         },
         id,

@@ -13,6 +13,9 @@ export interface OrderProps {
     deliverymanId?: UniqueEntityID | null
     status: OrderStatus
     name: string
+    address: string
+    latitude: number
+    longitude: number
     withdrawnDate?: Date
     deliveryDate?: Date
     createdAt: Date
@@ -28,6 +31,15 @@ export class Order extends Entity<OrderProps>{
     }
     get status() {
         return this.props.status
+    }
+    get address() {
+        return this.props.address
+    }
+    get latitude() {
+        return this.props.latitude
+    }
+    get longitude() {
+        return this.props.longitude
     }
     get name() {
         return this.props.name
@@ -63,6 +75,18 @@ export class Order extends Entity<OrderProps>{
     }
     set deliveryDate(deliveryDate: Date) {
         this.props.deliveryDate = deliveryDate
+        this.touch()
+    }
+    set address(address: string) {
+        this.props.address = address
+        this.touch()
+    }
+    set latitude(latitude: number) {
+        this.props.latitude = latitude
+        this.touch()
+    }
+    set longitude(longitude: number) {
+        this.props.longitude = longitude
         this.touch()
     }
 

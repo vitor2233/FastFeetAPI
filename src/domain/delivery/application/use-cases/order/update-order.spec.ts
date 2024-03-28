@@ -19,7 +19,10 @@ describe('Update Order', () => {
         const result = await sut.execute({
             orderId: 'order-1',
             name: 'Pacote 2',
-            deliverymanId: '123'
+            deliverymanId: '123',
+            address: 'Rua 1',
+            latitude: 123.456,
+            longitude: 456.789
         });
 
         expect(result.isRight()).toBe(true);

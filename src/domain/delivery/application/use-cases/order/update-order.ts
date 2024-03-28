@@ -8,6 +8,9 @@ interface UpdateOrderUseCaseRequest {
     orderId: string
     deliverymanId: string
     name: string
+    address: string
+    latitude: number
+    longitude: number
 }
 
 type UpdateOrderUseCaseResponse = Either<ResourceNotFoundError, { order: Order }>
@@ -17,7 +20,7 @@ export class UpdateOrderUseCase {
         private ordersRepository: OrdersRepository,
     ) { }
 
-    async execute({ orderId, name, deliverymanId }: UpdateOrderUseCaseRequest): Promise<UpdateOrderUseCaseResponse> {
+    async execute({ orderId, name, address, latitude, longitude, deliverymanId }: UpdateOrderUseCaseRequest): Promise<UpdateOrderUseCaseResponse> {
         const order = await this.ordersRepository.findById(orderId)
         if (!order) {
             return left(new ResourceNotFoundError())
@@ -25,6 +28,9 @@ export class UpdateOrderUseCase {
 
         order.deliverymanId = new UniqueEntityID(deliverymanId)
         order.name = name
+        order.address = address
+        order.latitude = latitude
+        order.longitude = longitude
 
         await this.ordersRepository.save(order)
 

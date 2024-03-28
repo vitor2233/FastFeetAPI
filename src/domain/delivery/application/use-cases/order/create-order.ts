@@ -6,6 +6,9 @@ import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 interface CreateOrderUseCaseRequest {
     receiverId: string
     name: string
+    address: string
+    latitude: number
+    longitude: number
 }
 
 type CreateOrderUseCaseResponse = Either<null, { order: Order }>
@@ -15,9 +18,12 @@ export class CreateOrderUseCase {
         private ordersRepository: OrdersRepository,
     ) { }
 
-    async execute({ receiverId, name }: CreateOrderUseCaseRequest): Promise<CreateOrderUseCaseResponse> {
+    async execute({ receiverId, name, address, latitude, longitude }: CreateOrderUseCaseRequest): Promise<CreateOrderUseCaseResponse> {
         const order = Order.create({
             name,
+            address,
+            latitude,
+            longitude,
             receiverId: new UniqueEntityID(receiverId),
             status: OrderStatus.WAITING,
         })

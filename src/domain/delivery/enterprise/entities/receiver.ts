@@ -9,25 +9,13 @@ export enum UserRole {
 
 export interface ReceiverProps {
     name: string
-    address: string
-    latitude: number
-    longitude: number
     createdAt: Date
     updatedAt?: Date | null
 }
 
 export class Receiver extends Entity<ReceiverProps>{
-    get address() {
-        return this.props.address
-    }
     get name() {
         return this.props.name
-    }
-    get latitude() {
-        return this.props.latitude
-    }
-    get longitude() {
-        return this.props.longitude
     }
     get createdAt() {
         return this.props.createdAt
@@ -38,18 +26,6 @@ export class Receiver extends Entity<ReceiverProps>{
 
     set name(name: string) {
         this.props.name = name
-        this.touch()
-    }
-    set address(address: string) {
-        this.props.address = address
-        this.touch()
-    }
-    set latitude(latitude: number) {
-        this.props.latitude = latitude
-        this.touch()
-    }
-    set longitude(longitude: number) {
-        this.props.longitude = longitude
         this.touch()
     }
 

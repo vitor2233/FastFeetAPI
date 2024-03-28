@@ -14,9 +14,6 @@ describe('Create Receiver', () => {
     it('should be able to create a receiver', async () => {
         const result = await sut.execute({
             name: 'Vitor',
-            address: 'Rua teste, 123',
-            latitude: -19.974579,
-            longitude: -43.9464643
         })
 
         expect(result.isRight()).toBe(true)

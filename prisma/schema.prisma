@@ -27,9 +27,6 @@ enum OrderStatus {
 model Receiver {
   id        String    @id @default(uuid())
   name      String
-  address   String
-  latitude  Decimal
-  longitude Decimal
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   orders    Order[]
@@ -48,6 +45,9 @@ model Order {
   id            String      @id @default(uuid())
   status        OrderStatus @default(WAITING)
   name          String
+  address       String
+  latitude      Decimal
+  longitude     Decimal
   withdrawnDate DateTime?
   deliveryDate  DateTime?
   createdAt     DateTime    @default(now()) @map("created_at")

@@ -18,10 +18,7 @@ describe('Update Receiver', () => {
 
         const result = await sut.execute({
             receiverId: 'receiver-1',
-            address: 'Updated Address',
             name: 'Cliente novo',
-            latitude: 123.456,
-            longitude: 456.789
         });
 
         expect(result.isRight()).toBe(true);

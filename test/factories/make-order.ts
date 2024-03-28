@@ -10,6 +10,9 @@ export function makeOrder(
         {
             name: faker.person.fullName(),
             deliverymanId: null,
+            address: faker.location.streetAddress(),
+            latitude: faker.location.latitude(),
+            longitude: faker.location.longitude(),
             status: OrderStatus.WAITING,
             receiverId: new UniqueEntityID(),
             ...override,

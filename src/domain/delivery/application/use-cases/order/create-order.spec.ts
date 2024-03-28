@@ -14,6 +14,9 @@ describe('Create Order', () => {
     it('should be able to create an order', async () => {
         const result = await sut.execute({
             name: 'Pacote 01',
+            address: 'Rua teste, 123',
+            latitude: -19.974579,
+            longitude: -43.9464643,
             receiverId: '123'
         })
 
