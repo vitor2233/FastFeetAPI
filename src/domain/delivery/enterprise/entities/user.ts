@@ -19,7 +19,8 @@ export class User extends Entity<UserProps>{
     }
     get name() {
         return this.props.name
-    } get password() {
+    }
+    get password() {
         return this.props.password
     }
     get role() {
@@ -31,6 +32,9 @@ export class User extends Entity<UserProps>{
     }
     set cpf(cpf: string) {
         this.props.cpf = cpf
+    }
+    set password(password: string) {
+        this.props.password = password
     }
 
     static create(props: UserProps, id?: UniqueEntityID) {

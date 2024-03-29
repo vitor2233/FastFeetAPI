@@ -16,14 +16,21 @@ export class InMemoryOrdersRepository implements OrdersRepository {
         return order
     }
 
-    async findManyNearby(params: FindManyNearbyParams): Promise<Order[]> {
-        return this.items.filter((item) => {
-            const distance = getDistanceBetweenCoordinates(
-                { latitude: params.latitude, longitude: params.longitude },
-                { latitude: item.latitude, longitude: item.longitude })
+    async findManyByDeliverymanId(deliverymanId: string): Promise<Order[]> {
+        return this.items
+            .filter((item) => item.deliverymanId.toString() == deliverymanId)
+    }
 
-            return distance < 10
-        })
+    async findManyNearby(params: FindManyNearbyParams): Promise<Order[]> {
+        return this.items
+            .filter((item) => item.deliverymanId.toString() == params.deliverymanId)
+            .filter((item) => {
+                const distance = getDistanceBetweenCoordinates(
+                    { latitude: params.latitude, longitude: params.longitude },
+                    { latitude: item.latitude, longitude: item.longitude })
+
+                return distance < 10
+            })
     }
 
     async create(order: Order): Promise<void> {

@@ -4,9 +4,6 @@ import { Receiver } from "@/domain/delivery/enterprise/entities/receiver";
 
 interface CreateReceiverUseCaseRequest {
     name: string
-    address: string
-    latitude: number
-    longitude: number
 }
 
 type CreateReceiverUseCaseResponse = Either<null, { receiver: Receiver }>
@@ -16,12 +13,9 @@ export class CreateReceiverUseCase {
         private receiversRepository: ReceiversRepository,
     ) { }
 
-    async execute({ name, address, latitude, longitude }: CreateReceiverUseCaseRequest): Promise<CreateReceiverUseCaseResponse> {
+    async execute({ name }: CreateReceiverUseCaseRequest): Promise<CreateReceiverUseCaseResponse> {
         const receiver = Receiver.create({
             name,
-            address,
-            latitude,
-            longitude
         })
 
         await this.receiversRepository.create(receiver)
