@@ -3,6 +3,7 @@ import { UsersRepository } from "../../repositories/users-repository";
 import { UserAlreadyExistsError } from "../errors/user-already-exists-error";
 import { User, UserRole } from "@/domain/delivery/enterprise/entities/user";
 import { HashGenerator } from "@/domain/delivery/cryptography/hash-generator";
+import { Injectable } from "@nestjs/common";
 
 interface CreateUserUseCaseRequest {
     cpf: string
@@ -13,6 +14,7 @@ interface CreateUserUseCaseRequest {
 
 type CreateUserUseCaseResponse = Either<UserAlreadyExistsError, { user: User }>
 
+@Injectable()
 export class CreateUserUseCase {
     constructor(
         private usersRepository: UsersRepository,

@@ -8,6 +8,7 @@ import { Encrypter } from "@/domain/delivery/cryptography/encrypter";
 import { HashComparer } from "@/domain/delivery/cryptography/hash-comparer";
 import { WrongCredentialsError } from "../errors/wrong-credentials-error";
 import { NotAllowedError } from "@/core/errors/not-allowed-error";
+import { Injectable } from "@nestjs/common";
 
 interface UpdateUserPasswordUseCaseRequest {
     idUser: string
@@ -17,6 +18,7 @@ interface UpdateUserPasswordUseCaseRequest {
 
 type UpdateUserPasswordUseCaseResponse = Either<ResourceNotFoundError | WrongCredentialsError | NotAllowedError, { user: User }>
 
+@Injectable()
 export class UpdateUserPasswordUseCase {
     constructor(
         private usersRepository: UsersRepository,

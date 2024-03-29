@@ -4,6 +4,7 @@ import { Order, OrderStatus } from "@/domain/delivery/enterprise/entities/order"
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { UsersRepository } from "../../repositories/users-repository";
+import { Injectable } from "@nestjs/common";
 
 interface WithdrawOrderUseCaseRequest {
     deliverymanId: string
@@ -12,6 +13,7 @@ interface WithdrawOrderUseCaseRequest {
 
 type WithdrawOrderUseCaseResponse = Either<ResourceNotFoundError, { order: Order }>
 
+@Injectable()
 export class WithdrawOrderUseCase {
     constructor(
         private ordersRepository: OrdersRepository,

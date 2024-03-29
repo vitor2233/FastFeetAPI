@@ -2,7 +2,7 @@ import { Either, left, right } from "@/core/either";
 import { ReceiversRepository } from "../../repositories/receivers-repository";
 import { Receiver } from "@/domain/delivery/enterprise/entities/receiver";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Injectable } from "@nestjs/common";
 
 interface UpdateReceiverUseCaseRequest {
     receiverId: string
@@ -11,6 +11,7 @@ interface UpdateReceiverUseCaseRequest {
 
 type UpdateReceiverUseCaseResponse = Either<ResourceNotFoundError, { receiver: Receiver }>
 
+@Injectable()
 export class UpdateReceiverUseCase {
     constructor(
         private receiversRepository: ReceiversRepository,

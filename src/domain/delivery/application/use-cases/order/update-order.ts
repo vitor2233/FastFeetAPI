@@ -3,6 +3,7 @@ import { OrdersRepository } from "../../repositories/orders-repository";
 import { Order } from "@/domain/delivery/enterprise/entities/order";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Injectable } from "@nestjs/common";
 
 interface UpdateOrderUseCaseRequest {
     orderId: string
@@ -15,6 +16,7 @@ interface UpdateOrderUseCaseRequest {
 
 type UpdateOrderUseCaseResponse = Either<ResourceNotFoundError, { order: Order }>
 
+@Injectable()
 export class UpdateOrderUseCase {
     constructor(
         private ordersRepository: OrdersRepository,

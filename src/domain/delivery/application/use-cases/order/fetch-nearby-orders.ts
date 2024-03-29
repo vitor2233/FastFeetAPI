@@ -5,6 +5,7 @@ import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { UsersRepository } from "../../repositories/users-repository";
 import { UserRole } from "@/domain/delivery/enterprise/entities/user";
 import { NotAllowedError } from "@/core/errors/not-allowed-error";
+import { Injectable } from "@nestjs/common";
 
 interface FetchNearbyOrdersUseCaseRequest {
     deliverymanId: string
@@ -14,6 +15,7 @@ interface FetchNearbyOrdersUseCaseRequest {
 
 type FetchNearbyOrdersUseCaseResponse = Either<ResourceNotFoundError | NotAllowedError, { orders: Order[] }>
 
+@Injectable()
 export class FetchNearbyOrdersUseCase {
     constructor(
         private ordersRepository: OrdersRepository,

@@ -4,6 +4,7 @@ import { UserAlreadyExistsError } from "../errors/user-already-exists-error";
 import { User, UserRole } from "@/domain/delivery/enterprise/entities/user";
 import { HashGenerator } from "@/domain/delivery/cryptography/hash-generator";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
+import { Injectable } from "@nestjs/common";
 
 interface UpdateUserUseCaseRequest {
     userId: string
@@ -13,6 +14,7 @@ interface UpdateUserUseCaseRequest {
 
 type UpdateUserUseCaseResponse = Either<ResourceNotFoundError, { user: User }>
 
+@Injectable()
 export class UpdateUserUseCase {
     constructor(
         private usersRepository: UsersRepository,

@@ -3,6 +3,7 @@ import { OrdersRepository } from "../../repositories/orders-repository";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { OrderStatus } from "@/domain/delivery/enterprise/entities/order";
 import { NotAllowedError } from "@/core/errors/not-allowed-error";
+import { Injectable } from "@nestjs/common";
 
 interface DeleteOrderUseCaseRequest {
     orderId: string
@@ -10,6 +11,7 @@ interface DeleteOrderUseCaseRequest {
 
 type DeleteOrderUseCaseResponse = Either<ResourceNotFoundError, {}>
 
+@Injectable()
 export class DeleteOrderUseCase {
     constructor(
         private ordersRepository: OrdersRepository,
