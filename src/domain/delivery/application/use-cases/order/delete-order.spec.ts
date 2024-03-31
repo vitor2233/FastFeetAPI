@@ -3,14 +3,20 @@ import { DeleteOrderUseCase } from './delete-order';
 import { makeOrder } from 'test/factories/make-order';
 import { OrderStatus } from '@/domain/delivery/enterprise/entities/order';
 import { NotAllowedError } from '@/core/errors/not-allowed-error';
+import { makeUser } from 'test/factories/make-user';
+import { UserRole } from '@/domain/delivery/enterprise/entities/user';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository';
 
 let inMemoryOrdersRepository: InMemoryOrdersRepository;
+let inMemoryUsersRepository: InMemoryUsersRepository;
 let sut: DeleteOrderUseCase;
 
 describe('Delete Order', () => {
     beforeEach(() => {
         inMemoryOrdersRepository = new InMemoryOrdersRepository();
-        sut = new DeleteOrderUseCase(inMemoryOrdersRepository);
+        inMemoryUsersRepository = new InMemoryUsersRepository();
+        sut = new DeleteOrderUseCase(inMemoryOrdersRepository, inMemoryUsersRepository);
     });
 
     it('should be able to delete an order', async () => {
@@ -19,7 +25,11 @@ describe('Delete Order', () => {
         })
         await inMemoryOrdersRepository.create(order)
 
+        const loggedUser = makeUser({ role: UserRole.ADMIN }, new UniqueEntityID('user-1'))
+        await inMemoryUsersRepository.create(loggedUser)
+
         await sut.execute({
+            userId: 'user-1',
             orderId: order.id.toString()
         })
 
@@ -30,7 +40,11 @@ describe('Delete Order', () => {
         const order = makeOrder()
         await inMemoryOrdersRepository.create(order)
 
+        const loggedUser = makeUser({ role: UserRole.ADMIN }, new UniqueEntityID('user-1'))
+        await inMemoryUsersRepository.create(loggedUser)
+
         const result = await sut.execute({
+            userId: 'user-1',
             orderId: order.id.toString()
         })
 

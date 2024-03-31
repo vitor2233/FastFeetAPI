@@ -9,7 +9,7 @@ export function makeUser(
     const question = User.create(
         {
             name: faker.person.fullName(),
-            cpf: '111.111.111-11',
+            cpf: faker.internet.email(),
             password: faker.internet.password(),
             role: UserRole.DELIVERYMAN,
             ...override,

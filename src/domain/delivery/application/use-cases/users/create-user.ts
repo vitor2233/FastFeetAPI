@@ -4,15 +4,17 @@ import { UserAlreadyExistsError } from "../errors/user-already-exists-error";
 import { User, UserRole } from "@/domain/delivery/enterprise/entities/user";
 import { HashGenerator } from "@/domain/delivery/cryptography/hash-generator";
 import { Injectable } from "@nestjs/common";
+import { NotAllowedError } from "@/core/errors/not-allowed-error";
 
 interface CreateUserUseCaseRequest {
+    userId: string
     cpf: string
     name: string
     password: string
     role: 'DELIVERYMAN' | 'ADMIN'
 }
 
-type CreateUserUseCaseResponse = Either<UserAlreadyExistsError, { user: User }>
+type CreateUserUseCaseResponse = Either<UserAlreadyExistsError | NotAllowedError, { user: User }>
 
 @Injectable()
 export class CreateUserUseCase {
@@ -21,7 +23,12 @@ export class CreateUserUseCase {
         private hashGenerator: HashGenerator
     ) { }
 
-    async execute({ cpf, name, password, role }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+    async execute({ cpf, userId, name, password, role }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+        const loggedUser = await this.usersRepository.findById(userId)
+        if (loggedUser.role != UserRole.ADMIN) {
+            return left(new NotAllowedError())
+        }
+
         const userWithSameCpf = await this.usersRepository.findByCpf(cpf)
 
         if (userWithSameCpf) {

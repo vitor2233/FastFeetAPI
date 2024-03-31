@@ -5,14 +5,16 @@ import { User, UserRole } from "@/domain/delivery/enterprise/entities/user";
 import { HashGenerator } from "@/domain/delivery/cryptography/hash-generator";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { Injectable } from "@nestjs/common";
+import { NotAllowedError } from "@/core/errors/not-allowed-error";
 
 interface UpdateUserUseCaseRequest {
+    loggedUserId: string
     userId: string
     cpf: string
     name: string
 }
 
-type UpdateUserUseCaseResponse = Either<ResourceNotFoundError, { user: User }>
+type UpdateUserUseCaseResponse = Either<ResourceNotFoundError | NotAllowedError, { user: User }>
 
 @Injectable()
 export class UpdateUserUseCase {
@@ -20,7 +22,12 @@ export class UpdateUserUseCase {
         private usersRepository: UsersRepository,
     ) { }
 
-    async execute({ userId, cpf, name }: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
+    async execute({ userId, loggedUserId, cpf, name }: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
+        const loggedUser = await this.usersRepository.findById(loggedUserId)
+        if (loggedUser.role != UserRole.ADMIN) {
+            return left(new NotAllowedError())
+        }
+
         const user = await this.usersRepository.findById(userId)
         if (!user) {
             return left(new ResourceNotFoundError())
