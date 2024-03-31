@@ -2,11 +2,6 @@ import { Optional } from "@/core/types/optional";
 import { Entity } from "src/core/entities/entity";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
-export enum UserRole {
-    DELIVERYMAN,
-    ADMIN
-}
-
 export interface ReceiverProps {
     name: string
     createdAt: Date
