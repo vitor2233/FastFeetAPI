@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { OrdersController } from './orders.controller';
-import { UsersController } from './user.controller';
 import { ReceiversController } from './receiver.controller';
 import { CreateOrderUseCase } from '@/domain/delivery/application/use-cases/order/create-order';
 import { DeleteOrderUseCase } from '@/domain/delivery/application/use-cases/order/delete-order';
@@ -18,10 +17,27 @@ import { DeleteUserUseCase } from '@/domain/delivery/application/use-cases/users
 import { UpdateUserUseCase } from '@/domain/delivery/application/use-cases/users/update-user';
 import { UpdateUserPasswordUseCase } from '@/domain/delivery/application/use-cases/users/update-user-password';
 import { DatabaseModule } from '../database/database.module';
+import { CryptographyModule } from '../cryptography/cryptography.module';
+import { AuthenticateUserController } from './users/authenticate-user.controller';
+import { CreateUserController } from './users/create-user.controller';
+import { DeleteUserController } from './users/delete-user.controller';
+import { UpdateUserController } from './users/update-user.controller';
+import { UpdateUserPasswordController } from './users/update-user-password.controller';
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [OrdersController, UsersController, ReceiversController],
+  imports: [DatabaseModule, CryptographyModule],
+  controllers: [
+    //Orders
+    OrdersController,
+    //Users
+    AuthenticateUserController,
+    CreateUserController,
+    UpdateUserController,
+    UpdateUserPasswordController,
+    DeleteUserController,
+    //Receivers
+    ReceiversController
+  ],
   providers: [
     //Orders
     CreateOrderUseCase,

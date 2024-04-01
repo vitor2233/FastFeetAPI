@@ -11,7 +11,8 @@ import { NotAllowedError } from "@/core/errors/not-allowed-error";
 import { Injectable } from "@nestjs/common";
 
 interface UpdateUserPasswordUseCaseRequest {
-    idUser: string
+    loggedUserId: string
+    userId: string
     oldPassword: string
     newPassword: string
 }
@@ -26,8 +27,13 @@ export class UpdateUserPasswordUseCase {
         private hashComparer: HashComparer,
     ) { }
 
-    async execute({ idUser, oldPassword, newPassword }: UpdateUserPasswordUseCaseRequest): Promise<UpdateUserPasswordUseCaseResponse> {
-        const user = await this.usersRepository.findById(idUser)
+    async execute({ loggedUserId, userId, oldPassword, newPassword }: UpdateUserPasswordUseCaseRequest): Promise<UpdateUserPasswordUseCaseResponse> {
+        const loggedUser = await this.usersRepository.findById(loggedUserId)
+        if (loggedUser.role != UserRole.ADMIN) {
+            return left(new NotAllowedError())
+        }
+
+        const user = await this.usersRepository.findById(userId)
         if (!user) {
             return left(new ResourceNotFoundError())
         }
@@ -39,7 +45,6 @@ export class UpdateUserPasswordUseCase {
         }
 
         const hashedPassword = await this.hashGenerator.hash(newPassword)
-        console.log(hashedPassword);
 
         user.password = hashedPassword
 

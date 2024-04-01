@@ -5,6 +5,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { FakeHasher } from 'test/cryptography/fake-hasher';
 import { UpdateUserPasswordUseCase } from './update-user-password';
 import { WrongCredentialsError } from '../errors/wrong-credentials-error';
+import { UserRole } from '@/domain/delivery/enterprise/entities/user';
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let fakeHasher: FakeHasher;
@@ -19,12 +20,14 @@ describe('Update User Password', () => {
 
     it('should be able to update an users password', async () => {
         const user = makeUser({
+            role: UserRole.ADMIN,
             password: await fakeHasher.hash('old')
         }, new UniqueEntityID('user-1'))
         inMemoryUsersRepository.items.push(user)
 
         const result = await sut.execute({
-            idUser: 'user-1',
+            loggedUserId: 'user-1',
+            userId: 'user-1',
             oldPassword: 'old',
             newPassword: 'new'
         });
@@ -38,12 +41,14 @@ describe('Update User Password', () => {
 
     it('should not be able to update an users password with wrong old password', async () => {
         const user = makeUser({
+            role: UserRole.ADMIN,
             password: await fakeHasher.hash('old')
         }, new UniqueEntityID('user-1'))
         inMemoryUsersRepository.items.push(user)
 
         const result = await sut.execute({
-            idUser: 'user-1',
+            loggedUserId: 'user-1',
+            userId: 'user-1',
             oldPassword: 'old2',
             newPassword: 'new'
         });

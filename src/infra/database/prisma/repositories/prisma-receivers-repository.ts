@@ -2,6 +2,7 @@ import { ReceiversRepository } from "@/domain/delivery/application/repositories/
 import { Receiver } from "@/domain/delivery/enterprise/entities/receiver";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma.service";
+import { PrismaReceiverMapper } from "../mappers/prisma-receiver-mapper";
 
 @Injectable()
 export class PrismaReceiversRepository implements ReceiversRepository {
@@ -10,16 +11,33 @@ export class PrismaReceiversRepository implements ReceiversRepository {
     ) { }
 
     async findById(id: string): Promise<Receiver> {
-        throw new Error("Method not implemented.");
-    }
-    async create(receiver: Receiver): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    async save(receiver: Receiver): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    async delete(receiver: Receiver): Promise<void> {
-        throw new Error("Method not implemented.");
+        const receiver = await this.prisma.receiver.findUnique({
+            where: { id }
+        })
+
+        if (!receiver) {
+            return null
+        }
+
+        return PrismaReceiverMapper.toDomain(receiver);
     }
 
+    async create(receiver: Receiver): Promise<void> {
+        await this.prisma.receiver.create({
+            data: PrismaReceiverMapper.toPrisma(receiver)
+        })
+    }
+
+    async save(receiver: Receiver): Promise<void> {
+        await this.prisma.receiver.update({
+            where: { id: receiver.id.toString() },
+            data: PrismaReceiverMapper.toPrisma(receiver)
+        })
+    }
+
+    async delete(receiver: Receiver): Promise<void> {
+        await this.prisma.receiver.delete({
+            where: { id: receiver.id.toString() }
+        })
+    }
 }
