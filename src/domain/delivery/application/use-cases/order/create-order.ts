@@ -8,8 +8,8 @@ import { NotAllowedError } from "@/core/errors/not-allowed-error";
 import { UserRole } from "@/domain/delivery/enterprise/entities/user";
 
 interface CreateOrderUseCaseRequest {
-    receiverId: string
     userId: string
+    receiverId: string
     name: string
     address: string
     latitude: number
